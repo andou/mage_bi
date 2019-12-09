@@ -45,6 +45,52 @@
                     <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                 </div>
             </div>
+
+            <div class="container-fluid" style="margin-top: 36px;">
+                <p>
+                    Generate it with <a data-toggle="collapse" href="#collapseExample" role="button"
+                                        aria-expanded="false" aria-controls="collapseExample">
+                    this query
+                </a>
+                </p>
+                <div class="collapse" id="collapseExample">
+                    <div class="card card-body">
+
+
+<pre style="text-align:left!important;color:#000000;background:#ffffff;"><span style="color:#000084; font-weight:bold; ">SELECT</span>
+	so.increment_id <span style="color:#000084; font-weight:bold; ">AS</span> <span style="color:#0000ff; ">'ORDER ID'</span>,
+	so.state <span style="color:#000084; font-weight:bold; ">AS</span> <span style="color:#0000ff; ">'STATE'</span>,
+	so.created_at <span style="color:#000084; font-weight:bold; ">AS</span> <span style="color:#0000ff; ">'CREATED'</span>,
+	s.name <span style="color:#000084; font-weight:bold; ">AS</span> <span style="color:#0000ff; ">'STORE NAME'</span>,
+	s.code <span style="color:#000084; font-weight:bold; ">AS</span> <span style="color:#0000ff; ">'STORE CODE'</span>,
+	so.total_item_count <span style="color:#000084; font-weight:bold; ">AS</span> <span style="color:#0000ff; ">'TOTAL ITEMS'</span>,
+	sop.method <span style="color:#000084; font-weight:bold; ">AS</span> <span style="color:#0000ff; ">'PAYMENT METHOD'</span>,
+	<span style="color:#000084; font-weight:bold; ">FORMAT</span>(so.grand_total,2,<span style="color:#0000ff; ">'it_IT'</span>) <span style="color:#000084; font-weight:bold; ">AS</span> <span style="color:#0000ff; ">'TOTAL IN LOCAL CURRENCY'</span>,
+	so.base_currency_code <span style="color:#000084; font-weight:bold; ">AS</span> <span style="color:#0000ff; ">'CURRENCY'</span>,
+	<span style="color:#000084; font-weight:bold; ">CASE</span>
+		<span style="color:#000084; font-weight:bold; ">WHEN</span> so.base_currency_code = <span style="color:#0000ff; ">'USD'</span> <span style="color:#000084; font-weight:bold; ">THEN</span> <span style="color:#000084; font-weight:bold; ">FORMAT</span>(so.grand_total * 0.8800,2,<span style="color:#0000ff; ">'it_IT'</span>) <span style="color:#808080; ">-- specify your conversion</span>
+		<span style="color:#000084; font-weight:bold; ">WHEN</span> so.base_currency_code = <span style="color:#0000ff; ">'GBP'</span> <span style="color:#000084; font-weight:bold; ">THEN</span> <span style="color:#000084; font-weight:bold; ">FORMAT</span>(so.grand_total * 1.1400,2,<span style="color:#0000ff; ">'it_IT'</span>) <span style="color:#808080; ">-- specify your conversion</span>
+		<span style="color:#000084; font-weight:bold; ">ELSE</span> <span style="color:#000084; font-weight:bold; ">FORMAT</span>(so.grand_total, 2,<span style="color:#0000ff; ">'it_IT'</span>)
+	<span style="color:#000084; font-weight:bold; ">END</span> <span style="color:#000084; font-weight:bold; ">AS</span> <span style="color:#0000ff; ">'TOTAL IN EUR'</span>,
+	<span style="color:#000084; font-weight:bold; ">FORMAT</span>(so.shipping_amount, 2,<span style="color:#0000ff; ">'it_IT'</span>) <span style="color:#000084; font-weight:bold; ">AS</span> <span style="color:#0000ff; ">'SHIPPING COSTS IN LOCAL CURRENCY'</span>,
+	<span style="color:#000084; font-weight:bold; ">CASE</span>
+		<span style="color:#000084; font-weight:bold; ">WHEN</span> so.base_currency_code = <span style="color:#0000ff; ">'USD'</span> <span style="color:#000084; font-weight:bold; ">THEN</span> <span style="color:#000084; font-weight:bold; ">FORMAT</span>(so.shipping_amount * 0.8800,2,<span style="color:#0000ff; ">'it_IT'</span>) <span style="color:#808080; ">-- specify your conversion</span>
+		<span style="color:#000084; font-weight:bold; ">WHEN</span> so.base_currency_code = <span style="color:#0000ff; ">'GBP'</span> <span style="color:#000084; font-weight:bold; ">THEN</span> <span style="color:#000084; font-weight:bold; ">FORMAT</span>(so.shipping_amount * 1.1400,2,<span style="color:#0000ff; ">'it_IT'</span>) <span style="color:#808080; ">-- specify your conversion</span>
+		<span style="color:#000084; font-weight:bold; ">ELSE</span> <span style="color:#000084; font-weight:bold; ">FORMAT</span>(so.shipping_amount,2,<span style="color:#0000ff; ">'it_IT'</span>)
+	<span style="color:#000084; font-weight:bold; ">END</span> <span style="color:#000084; font-weight:bold; ">AS</span> <span style="color:#0000ff; ">'SHIPPING COSTS IN EUR'</span>
+<span style="color:#000084; font-weight:bold; ">FROM</span> sales_order so
+<span style="color:#000084; font-weight:bold; ">JOIN</span> store s <span style="color:#000084; font-weight:bold; ">ON</span> so.store_id = s.store_id
+<span style="color:#000084; font-weight:bold; ">JOIN</span> sales_order_payment sop <span style="color:#000084; font-weight:bold; ">ON</span> sop.parent_id = so.entity_id
+<span style="color:#000084; font-weight:bold; ">WHERE</span> so.created_at &gt;= <span style="color:#0000ff; ">'2019-09-11 00:00:00'</span> <span style="color:#808080; ">-- insert your start date and/or your end date</span>
+<span style="color:#000084; font-weight:bold; ">ORDER</span> <span style="color:#000084; font-weight:bold; ">BY</span> so.entity_id <span style="color:#000084; font-weight:bold; ">DESC</span>;
+</pre>
+
+
+                    </div>
+                </div>
+            </div>
+
+
         </section>
 
         <div class="card-deck mb-3 text-center sticky-top">
@@ -72,6 +118,10 @@
                     <h4 class="card-title pricing-card-title" id="summary-period-time">/</h4>
                 </div>
             </div>
+        </div>
+
+        <div class="row">
+
         </div>
 
         <nav>

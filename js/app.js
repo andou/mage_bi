@@ -3,7 +3,6 @@
 var input = document.getElementById('inputGroupFile01');
 var handsontableContainer = document.getElementById('table-container');
 var charter = new Charter(jQuery);
-var dater = new Dater();
 
 input.onchange = function () {
     var file = this.files[0];
@@ -36,10 +35,10 @@ input.onchange = function () {
             if (_el.length) {
                 var el = _el[0];
 
-                var thisdate = dater.getDate(el['CREATED']);
+                var thisdate = new Dater().getDate(el['CREATED']);
                 var state = el['STATE'];
                 var country = el['STORE NAME'];
-                var dateday = dater.getDateDay(thisdate);
+                var dateday = new Dater().getDateDay(thisdate);
 
                 if (valid_states.includes(state)) {
                     var this_total = parseFloat(el['TOTAL IN EUR']);
@@ -87,15 +86,16 @@ input.onchange = function () {
             }
         });
 
-        document.getElementById('summary-period-time').innerText = dater.getDateDay(start_date) + ' / ' + dater.getDateDay(end_date);
-        document.getElementById('summary-revenues-total').innerText = summary_revenues_total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' EUR';
-        document.getElementById('summary-orders-total').innerText = summary_orders_total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' Orders';
-
-
+        // Charts
         charter.loadCharts(rev_day_b_day.reverse(), _countries, punches);
         charter.showCharts();
 
-        // reset container
+        // Cards
+        var carder = new Carder(jQuery,summary_revenues_total,summary_orders_total,start_date,end_date);
+        carder.populateCards();
+        carder.showCards();
+
+        // Table
         handsontableContainer.innerHTML = '';
         handsontableContainer.className = '';
 

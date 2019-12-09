@@ -93,7 +93,7 @@
 
         </section>
 
-        <div class="card-deck mb-3 text-center sticky-top">
+        <div class="card-container card-deck mb-3 text-center sticky-top" style="display: none">
             <div class="card mb-4 shadow-sm">
                 <div class="card-header">
                     <h3 class="my-0 font-weight-normal">Total Revenues</h3>
@@ -112,10 +112,18 @@
             </div>
             <div class="card mb-4 shadow-sm">
                 <div class="card-header">
+                    <h3 class="my-0 font-weight-normal">AOV</h3>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title pricing-card-title" id="summary-orders-aov">0</h4>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
                     <h3 class="my-0 font-weight-normal">Period</h3>
                 </div>
                 <div class="card-body">
-                    <h4 class="card-title pricing-card-title" id="summary-period-time">/</h4>
+                    <h4 class="card-title pricing-card-title" id="summary-period-time" style="font-size: 0.9em;">/</h4>
                 </div>
             </div>
         </div>
@@ -172,6 +180,7 @@
 
 <script src="./js/Dater.js"></script>
 <script src="./js/Charter.js"></script>
+<script src="./js/Carder.js"></script>
 <script src="./js/app.js"></script>
 
 </body>

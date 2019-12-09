@@ -1,11 +1,35 @@
-.main{
+.main {
     font-family: 'Arimo', sans-serif;
+    overflow: hidden;
 }
 
-.chart-container{
-    width:65%;
-    float:left;
+canvas {
+    margin: 0 auto;
+}
+
+.container {
+    overflow: auto;
+}
+
+.half-rule {
+    margin-left: 0;
+    text-align: left;
+    width: 50%;
+}
+
+.chart-container {
+    width: 85%;
     margin-top: 50px;
+    padding-bottom: 25px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #dcdcdc;
+    margin-left: auto;
+    margin-right: auto;
+    display: none;
+}
+
+.custom-file-uploadcsv{
+    text-align: left;
 }
 
 .mbi-input-group {

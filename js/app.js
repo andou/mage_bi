@@ -22,6 +22,14 @@ input.onchange = function () {
         var _countries = [];
         var punches = [];
 
+        var summary_revenues_total = 0;
+        var summary_orders_total = 0;
+        var _start_date = new Date().getTime();
+        var _end_date = new Date(0).getTime();
+        var start_date = '';
+        var end_date = '';
+        var summary_period_time = '/';
+
         jQuery(actual_data).each(function (i) {
             var _el = jQuery(this);
             if (_el.length) {
@@ -33,11 +41,26 @@ input.onchange = function () {
                 var dateday = getDateDay(thisdate);
 
                 if (valid_states.includes(state)) {
+                    var this_total = parseFloat(el['TOTAL IN EUR']);
+                    var this_ts = thisdate.getTime();
+
+                    summary_revenues_total += this_total;
+                    summary_orders_total++;
+                    if (this_ts > _end_date) {
+                        _end_date = this_ts;
+                        end_date = thisdate;
+                    }
+                    if (this_ts < _start_date) {
+                        _start_date = this_ts;
+                        start_date = thisdate;
+                    }
+
+
                     if (typeof rev_day_b_day[dateday] === 'undefined') {
-                        rev_day_b_day[dateday] = parseFloat(el['TOTAL IN EUR']);
+                        rev_day_b_day[dateday] = this_total;
                     }
                     else {
-                        rev_day_b_day[dateday] = rev_day_b_day[dateday] + parseFloat(el['TOTAL IN EUR']);
+                        rev_day_b_day[dateday] = rev_day_b_day[dateday] + this_total;
                     }
 
                     if (typeof _countries[country] === 'undefined') {
@@ -63,6 +86,11 @@ input.onchange = function () {
             }
         });
 
+        document.getElementById('summary-period-time').innerText = getDateDay(start_date) + ' / ' + getDateDay(end_date);
+
+        document.getElementById('summary-revenues-total').innerText = summary_revenues_total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' EUR';
+        document.getElementById('summary-orders-total').innerText = summary_orders_total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' Orders';
+
         _countries = Object.values(_countries);
 
         var countries = _countries.sort(function (ca, cb) {
@@ -77,6 +105,10 @@ input.onchange = function () {
 
 
         loadCharts(rev_day_b_day.reverse(), countries, punches);
+
+        jQuery('.chart-container').each(function (i) {
+            jQuery(this).show(600);
+        });
 
         // reset container
         handsontableContainer.innerHTML = '';
@@ -118,6 +150,8 @@ function loadCharts(rev_data, countries_data, punch_data) {
         options: {
             title: {
                 display: true,
+                fontSize: 20,
+                fontFamily: 'Arimo',
                 text: 'Revenues Day By Day'
             },
             scales: {
@@ -141,6 +175,8 @@ function loadCharts(rev_data, countries_data, punch_data) {
         options: {
             title: {
                 display: true,
+                fontSize: 20,
+                fontFamily: 'Arimo',
                 text: 'Orders By Country'
             }
         }
@@ -165,6 +201,8 @@ function loadCharts(rev_data, countries_data, punch_data) {
         options: {
             title: {
                 display: true,
+                fontSize: 20,
+                fontFamily: 'Arimo',
                 text: 'Orders Punch Card'
             },
             scales: {

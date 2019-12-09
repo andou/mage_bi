@@ -29,73 +29,76 @@
 </head>
 <body>
 <main class="main" role="main">
-    <section class="jumbotron text-center">
-        <div class="container-fluid">
-            <h1 class="jumbotron-heading">Order Viewer v1.0.0</h1>
-        </div>
+    <div class="container">
+        <section class="jumbotron text-center">
+            <div class="container-fluid">
+                <h1 class="jumbotron-heading">Order Viewer v1.0.0</h1>
+            </div>
 
-        <div class="input-group mbi-input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-            </div>
-            <div class="custom-file">
-                <input class="custom-file-input" type="file" id="inputGroupFile01" accept=".csv" aria-describedby="inputGroupFileAddon01">
-                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-            </div>
-        </div>
-    </section>
-
-    <div class="card-deck mb-3 text-center">
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header">
-                <h3 class="my-0 font-weight-normal">Total Revenues</h3>
-            </div>
-            <div class="card-body">
-                <h4 class="card-title pricing-card-title">0 EUR</h4>
-            </div>
-        </div>
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header">
-                <h3 class="my-0 font-weight-normal">Total Orders</h3>
-            </div>
-            <div class="card-body">
-                <h4 class="card-title pricing-card-title">0</h4>
-            </div>
-        </div>
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header">
-                <h3 class="my-0 font-weight-normal">Period</h3>
-            </div>
-            <div class="card-body">
-                <h4 class="card-title pricing-card-title">/</h4>
-            </div>
-        </div>
-    </div>
-
-    <nav>
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <a class="nav-item nav-link active" id="nav-charts-tab" data-toggle="tab" href="#nav-charts" role="tab"
-               aria-controls="nav-charts" aria-selected="true">Charts</a>
-            <a class="nav-item nav-link" id="nav-table-tab" data-toggle="tab" href="#nav-table" role="tab"
-               aria-controls="nav-table" aria-selected="false">All orders</a>
-        </div>
-    </nav>
-    <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="nav-charts" role="tabpanel" aria-labelledby="nav-charts-tab">
-            <div id="charts-container">
-                <div id="rev_day_b_day_container" class="chart-container">
-                    <canvas id="rev_day_b_day_chart"></canvas>
+            <div class="input-group mbi-input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
                 </div>
-                <div id="countries_container" class="chart-container" >
-                    <canvas id="countries_chart"></canvas>
+                <div class="custom-file custom-file-uploadcsv">
+                    <input class="custom-file-input" type="file" id="inputGroupFile01" accept=".csv"
+                           aria-describedby="inputGroupFileAddon01">
+                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                 </div>
-                <div id="punch_container" class="chart-container">
-                    <canvas id="punch_chart"></canvas>
+            </div>
+        </section>
+
+        <div class="card-deck mb-3 text-center sticky-top">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h3 class="my-0 font-weight-normal">Total Revenues</h3>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title pricing-card-title" id="summary-revenues-total">0 EUR</h4>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h3 class="my-0 font-weight-normal">Total Orders</h3>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title pricing-card-title" id="summary-orders-total">0</h4>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h3 class="my-0 font-weight-normal">Period</h3>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title pricing-card-title" id="summary-period-time">/</h4>
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="nav-table" role="tabpanel" aria-labelledby="nav-table-tab">
-            <div id="table-container"></div>
+
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-charts-tab" data-toggle="tab" href="#nav-charts" role="tab"
+                   aria-controls="nav-charts" aria-selected="true">Charts</a>
+                <a class="nav-item nav-link" id="nav-table-tab" data-toggle="tab" href="#nav-table" role="tab"
+                   aria-controls="nav-table" aria-selected="false">All orders</a>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-charts" role="tabpanel" aria-labelledby="nav-charts-tab">
+                <div id="charts-container">
+                    <div id="rev_day_b_day_container" class="chart-container">
+                        <canvas id="rev_day_b_day_chart"></canvas>
+                    </div>
+                    <div id="countries_container" class="chart-container">
+                        <canvas id="countries_chart"></canvas>
+                    </div>
+                    <div id="punch_container" class="chart-container">
+                        <canvas id="punch_chart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-table" role="tabpanel" aria-labelledby="nav-table-tab">
+                <div id="table-container"></div>
+            </div>
         </div>
     </div>
 </main>

@@ -1,6 +1,6 @@
 /* global FileReader, Papa, Handsontable */
 
-var input = document.getElementById('input-file');
+var input = document.getElementById('inputGroupFile01');
 var handsontableContainer = document.getElementById('table-container');
 
 input.onchange = function () {

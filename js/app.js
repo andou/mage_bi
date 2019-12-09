@@ -165,7 +165,7 @@ function loadCharts(rev_data, countries_data, punch_data) {
         options: {
             title: {
                 display: true,
-                text: 'Revenues Punch Card'
+                text: 'Orders Punch Card'
             },
             scales: {
                 xAxes: [{

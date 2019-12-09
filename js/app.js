@@ -22,6 +22,7 @@ input.onchange = function () {
         var valid_states = ['complete', 'processing'];
         var rev_day_b_day = [];
         var punches = [];
+        var _countries = [];
 
         var summary_revenues_total = 0;
         var summary_orders_total = 0;

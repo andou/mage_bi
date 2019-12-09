@@ -2,6 +2,8 @@
 
 var input = document.getElementById('inputGroupFile01');
 var handsontableContainer = document.getElementById('table-container');
+var charter = new Charter(jQuery);
+var dater = new Dater();
 
 input.onchange = function () {
     var file = this.files[0];
@@ -19,7 +21,6 @@ input.onchange = function () {
 
         var valid_states = ['complete', 'processing'];
         var rev_day_b_day = [];
-        var _countries = [];
         var punches = [];
 
         var summary_revenues_total = 0;
@@ -28,17 +29,16 @@ input.onchange = function () {
         var _end_date = new Date(0).getTime();
         var start_date = '';
         var end_date = '';
-        var summary_period_time = '/';
 
         jQuery(actual_data).each(function (i) {
             var _el = jQuery(this);
             if (_el.length) {
                 var el = _el[0];
 
-                var thisdate = getDate(el['CREATED']);
+                var thisdate = dater.getDate(el['CREATED']);
                 var state = el['STATE'];
                 var country = el['STORE NAME'];
-                var dateday = getDateDay(thisdate);
+                var dateday = dater.getDateDay(thisdate);
 
                 if (valid_states.includes(state)) {
                     var this_total = parseFloat(el['TOTAL IN EUR']);
@@ -86,29 +86,13 @@ input.onchange = function () {
             }
         });
 
-        document.getElementById('summary-period-time').innerText = getDateDay(start_date) + ' / ' + getDateDay(end_date);
-
+        document.getElementById('summary-period-time').innerText = dater.getDateDay(start_date) + ' / ' + dater.getDateDay(end_date);
         document.getElementById('summary-revenues-total').innerText = summary_revenues_total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' EUR';
         document.getElementById('summary-orders-total').innerText = summary_orders_total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' Orders';
 
-        _countries = Object.values(_countries);
 
-        var countries = _countries.sort(function (ca, cb) {
-            if (ca.val < cb.val) {
-                return 1;
-            }
-            if (ca.val > cb.val) {
-                return -1;
-            }
-            return 0;
-        });
-
-
-        loadCharts(rev_day_b_day.reverse(), countries, punches);
-
-        jQuery('.chart-container').each(function (i) {
-            jQuery(this).show(600);
-        });
+        charter.loadCharts(rev_day_b_day.reverse(), _countries, punches);
+        charter.showCharts();
 
         // reset container
         handsontableContainer.innerHTML = '';
@@ -125,180 +109,7 @@ input.onchange = function () {
     reader.readAsText(file)
 };
 
-function getDate(dateString) {
-    return new Date(dateString);
-}
 
-function getDateDay(date) {
-    var monthNames = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
-    var day = date.getDate();
-    var monthIndex = date.getMonth();
-    var year = date.getFullYear();
-    return year + ' ' + monthNames[monthIndex] + ' ' + day;
-}
-
-function loadCharts(rev_data, countries_data, punch_data) {
-
-    new Chart(document.getElementById('rev_day_b_day_chart'), {
-        type: 'line',
-        data: {
-            labels: getChartLabels(rev_data),
-            datasets: [
-                composeDataset('Revenues', getDataSetValues(rev_data))
-            ]
-        },
-        options: {
-            title: {
-                display: true,
-                fontSize: 20,
-                fontFamily: 'Arimo',
-                text: 'Revenues Day By Day'
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
-
-    new Chart(document.getElementById('countries_chart'), {
-        type: 'pie',
-        data: {
-            labels: getChartObjLabels(countries_data),
-            datasets: [
-                composeDataset('Countries', getDataSetObjValues(countries_data))
-            ]
-        },
-        options: {
-            title: {
-                display: true,
-                fontSize: 20,
-                fontFamily: 'Arimo',
-                text: 'Orders By Country'
-            }
-        }
-    });
-
-    var punch_step = 10;
-    var punch_tick = 4;
-
-    new Chart(document.getElementById('punch_chart'), {
-        type: 'bubble',
-        data: {
-            datasets: [
-                composeDataset('Monday', getPunchValues(punch_data, 0, punch_step, punch_tick), 'rgba(255, 0, 64, 0.2)', 'rgba(0, 0, 0, 1)'),
-                composeDataset('Tuesday', getPunchValues(punch_data, 1, punch_step, punch_tick), 'rgba(255, 100, 64, 0.2)', 'rgba(0, 0, 0, 1)'),
-                composeDataset('Wednesday', getPunchValues(punch_data, 2, punch_step, punch_tick), 'rgba(255, 150, 64, 0.2)', 'rgba(0, 0, 0, 1)'),
-                composeDataset('Thursday', getPunchValues(punch_data, 3, punch_step, punch_tick), 'rgba(255, 200, 64, 0.2)', 'rgba(0, 0, 0, 1)'),
-                composeDataset('Friday', getPunchValues(punch_data, 4, punch_step, punch_tick), 'rgba(255, 250, 64, 0.2)', 'rgba(0, 0, 0, 1)'),
-                composeDataset('Saturday', getPunchValues(punch_data, 5, punch_step, punch_tick), 'rgba(255, 250, 0, 0.2)', 'rgba(0, 0, 0, 1)'),
-                composeDataset('Sunday', getPunchValues(punch_data, 6, punch_step, punch_tick), 'rgba(250, 250, 0, 0.2)', 'rgba(0, 0, 0, 1)')
-            ]
-        },
-        options: {
-            title: {
-                display: true,
-                fontSize: 20,
-                fontFamily: 'Arimo',
-                text: 'Orders Punch Card'
-            },
-            scales: {
-                xAxes: [{
-                    display: false,
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }],
-                yAxes: [{
-                    display: false,
-                    ticks: {
-                        beginAtZero: true,
-                        max: 70,
-                        stepSize: punch_step
-                    }
-                }]
-            },
-            tooltips: {
-                callbacks: {
-                    label: function (tooltipItem, data) {
-                        var ordx = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].r;
-                        var hourx = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].x;
-                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
-
-                        if (label) {
-                            label += '  (' + getHourFromX(hourx) + ':00 / ' + getHourFromX(hourx + 4) + ':00): ';
-                        }
-                        label += ordx + ' Orders';
-                        return label;
-                    }
-                }
-            }
-        }
-    });
-}
-
-function getHourFromX(x, size, punch_tick = 4) {
-    var _x = parseInt((x - (punch_tick / 2)) / punch_tick);
-    var s = String(_x);
-    while (s.length < (size || 2)) {
-        s = "0" + s;
-    }
-    return s;
-}
-
-function getChartLabels(data) {
-    return Object.keys(data).reverse();
-}
-
-function getDataSetValues(data) {
-    return Object.values(data).reverse();
-}
-
-function getChartObjLabels(data) {
-    var res = [];
-    jQuery(data).each(function (i) {
-        res.push(this.label);
-    });
-    return res;
-}
-
-function getDataSetObjValues(data) {
-    var res = [];
-    jQuery(data).each(function (i) {
-        res.push(this.val);
-    });
-    return res;
-}
-
-function getPunchValues(data, idx, punch_step, punch_tick) {
-    var res = [];
-    jQuery(data[idx]).each(function (i) {
-        res.push({
-            x: (punch_tick / 2) + (i * punch_tick),
-            y: (punch_step / 2) + ((6 - idx) * punch_step),
-            r: parseInt(this) * 2
-        });
-    });
-    return res;
-}
-
-function composeDataset(label,
-                        data,
-                        bgColors = ['rgba(54, 162, 235, 0.2)', 'rgba(255, 99, 132, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'],
-                        bdColors = ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)']) {
-
-    return {
-        label: label,
-        data: data,
-        backgroundColor: bgColors,
-        borderColor: bdColors,
-        borderWidth: 1
-    };
-
-}
 
 
 

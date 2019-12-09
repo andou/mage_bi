@@ -1,6 +1,7 @@
 function Charter($) {
     this.$ = $;
     this.chartContainerSelector = '.chart-container';
+    this.punchContainerId = 'punch_chart';
 }
 
 
@@ -71,16 +72,91 @@ Charter.prototype.getDataSetObjValues = function (data) {
 };
 
 
-Charter.prototype.getPunchValues = function (data, idx, punch_step, punch_tick) {
+Charter.prototype.getPunchValues = function (data, idx, punch_step, punch_tick, radius_const) {
     var res = [];
     jQuery(data[idx]).each(function (i) {
         res.push({
             x: (punch_tick / 2) + (i * punch_tick),
             y: (punch_step / 2) + ((6 - idx) * punch_step),
-            r: parseInt(this) * 2
+            r: parseInt(this) * radius_const
         });
     });
     return res;
+};
+
+Charter.prototype.generatePunch = function (punch_data, selector, punch_step = 10, punch_tick = 4) {
+
+    var max_radius = 25;
+    var max_count = 1;
+
+    jQuery(punch_data).each(function (i) {
+        var this_data = this;
+        jQuery(this_data).each(function (i) {
+            if (parseInt(this) > max_count) {
+                max_count = parseInt(this);
+                console.log('Max is: ' + max_count);
+            }
+        });
+    });
+
+    var radius_const = max_radius / max_count;
+
+
+    new Chart(
+        selector,
+        {
+            type: 'bubble',
+            data: {
+                datasets: [
+                    this.composeDataset('Monday', this.getPunchValues(punch_data, 0, punch_step, punch_tick, radius_const), 'rgba(255, 0, 64, 0.2)', 'rgba(0, 0, 0, 1)'),
+                    this.composeDataset('Tuesday', this.getPunchValues(punch_data, 1, punch_step, punch_tick, radius_const), 'rgba(255, 100, 64, 0.2)', 'rgba(0, 0, 0, 1)'),
+                    this.composeDataset('Wednesday', this.getPunchValues(punch_data, 2, punch_step, punch_tick, radius_const), 'rgba(255, 150, 64, 0.2)', 'rgba(0, 0, 0, 1)'),
+                    this.composeDataset('Thursday', this.getPunchValues(punch_data, 3, punch_step, punch_tick, radius_const), 'rgba(255, 200, 64, 0.2)', 'rgba(0, 0, 0, 1)'),
+                    this.composeDataset('Friday', this.getPunchValues(punch_data, 4, punch_step, punch_tick, radius_const), 'rgba(255, 250, 64, 0.2)', 'rgba(0, 0, 0, 1)'),
+                    this.composeDataset('Saturday', this.getPunchValues(punch_data, 5, punch_step, punch_tick, radius_const), 'rgba(255, 250, 0, 0.2)', 'rgba(0, 0, 0, 1)'),
+                    this.composeDataset('Sunday', this.getPunchValues(punch_data, 6, punch_step, punch_tick, radius_const), 'rgba(250, 250, 0, 0.2)', 'rgba(0, 0, 0, 1)')
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                    fontSize: 20,
+                    fontFamily: 'Arimo',
+                    text: 'Orders Punch Card'
+                },
+                scales: {
+                    xAxes: [{
+                        display: false,
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }],
+                    yAxes: [{
+                        display: false,
+                        ticks: {
+                            beginAtZero: true,
+                            max: 70,
+                            stepSize: punch_step
+                        }
+                    }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var ordx = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].r;
+                            var hourx = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].x;
+                            var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+                            if (label) {
+                                label += '  (' + new Dater().getHourFromX(hourx) + ':00 / ' + new Dater().getHourFromX(hourx + 4) + ':00): ';
+                            }
+                            label += parseInt(ordx / radius_const) + ' Orders';
+                            return label;
+                        }
+                    }
+                }
+            }
+        });
 };
 
 
@@ -131,60 +207,5 @@ Charter.prototype.loadCharts = function (rev_data, _countries_data, punch_data) 
         }
     });
 
-    var punch_step = 10;
-    var punch_tick = 4;
-
-    new Chart(document.getElementById('punch_chart'), {
-        type: 'bubble',
-        data: {
-            datasets: [
-                this.composeDataset('Monday', this.getPunchValues(punch_data, 0, punch_step, punch_tick), 'rgba(255, 0, 64, 0.2)', 'rgba(0, 0, 0, 1)'),
-                this.composeDataset('Tuesday', this.getPunchValues(punch_data, 1, punch_step, punch_tick), 'rgba(255, 100, 64, 0.2)', 'rgba(0, 0, 0, 1)'),
-                this.composeDataset('Wednesday', this.getPunchValues(punch_data, 2, punch_step, punch_tick), 'rgba(255, 150, 64, 0.2)', 'rgba(0, 0, 0, 1)'),
-                this.composeDataset('Thursday', this.getPunchValues(punch_data, 3, punch_step, punch_tick), 'rgba(255, 200, 64, 0.2)', 'rgba(0, 0, 0, 1)'),
-                this.composeDataset('Friday', this.getPunchValues(punch_data, 4, punch_step, punch_tick), 'rgba(255, 250, 64, 0.2)', 'rgba(0, 0, 0, 1)'),
-                this.composeDataset('Saturday', this.getPunchValues(punch_data, 5, punch_step, punch_tick), 'rgba(255, 250, 0, 0.2)', 'rgba(0, 0, 0, 1)'),
-                this.composeDataset('Sunday', this.getPunchValues(punch_data, 6, punch_step, punch_tick), 'rgba(250, 250, 0, 0.2)', 'rgba(0, 0, 0, 1)')
-            ]
-        },
-        options: {
-            title: {
-                display: true,
-                fontSize: 20,
-                fontFamily: 'Arimo',
-                text: 'Orders Punch Card'
-            },
-            scales: {
-                xAxes: [{
-                    display: false,
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }],
-                yAxes: [{
-                    display: false,
-                    ticks: {
-                        beginAtZero: true,
-                        max: 70,
-                        stepSize: punch_step
-                    }
-                }]
-            },
-            tooltips: {
-                callbacks: {
-                    label: function (tooltipItem, data) {
-                        var ordx = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].r;
-                        var hourx = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].x;
-                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
-
-                        if (label) {
-                            label += '  (' + new Dater().getHourFromX(hourx) + ':00 / ' + new Dater().getHourFromX(hourx + 4) + ':00): ';
-                        }
-                        label += ordx + ' Orders';
-                        return label;
-                    }
-                }
-            }
-        }
-    });
+    this.generatePunch(punch_data, document.getElementById(this.punchContainerId));
 };

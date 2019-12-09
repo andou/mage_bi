@@ -116,6 +116,10 @@ function loadCharts(rev_data, countries_data, punch_data) {
             ]
         },
         options: {
+            title: {
+                display: true,
+                text: 'Revenues Day By Day'
+            },
             scales: {
                 yAxes: [{
                     ticks: {
@@ -133,6 +137,12 @@ function loadCharts(rev_data, countries_data, punch_data) {
             datasets: [
                 composeDataset('Countries', getDataSetObjValues(countries_data))
             ]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Orders By Country'
+            }
         }
     });
 
@@ -153,6 +163,10 @@ function loadCharts(rev_data, countries_data, punch_data) {
             ]
         },
         options: {
+            title: {
+                display: true,
+                text: 'Revenues Punch Card'
+            },
             scales: {
                 xAxes: [{
                     display: false,

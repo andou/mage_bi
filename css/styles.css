@@ -1,5 +1,15 @@
+.main{
+    font-family: 'Arimo', sans-serif;
+}
+
+.chart-container{
+    width:65%;
+    float:left;
+    margin-top: 50px;
+}
+
 .mbi-input-group {
-    width: 60%;
+    width: 35%;
     margin-left: auto;
     margin-right: auto;
     margin-top: 36px;

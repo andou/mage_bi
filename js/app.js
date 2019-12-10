@@ -96,14 +96,22 @@ input.onchange = function () {
 
         Object.keys(rev_day_b_day).forEach(
             function (i) {
-                var revenues = rev_day_b_day[i];
-                var totOrders = orders_day_b_day[i];
                 aov_day_b_day[i] = (rev_day_b_day[i] / orders_day_b_day[i]).toFixed(2);
             }
         );
 
+        var cumulated_revenues = [];
+        var cumulated_total = 0;
+
+        Object.keys(rev_day_b_day).reverse().forEach(
+            function (i) {
+                cumulated_total += rev_day_b_day[i];
+                cumulated_revenues[i] = cumulated_total;
+            }
+        );
+
         // Charts
-        charter.loadCharts(rev_day_b_day.reverse(), orders_day_b_day.reverse(), aov_day_b_day.reverse(), _countries, punches);
+        charter.loadCharts(rev_day_b_day.reverse(), orders_day_b_day.reverse(), aov_day_b_day.reverse(), cumulated_revenues.reverse(), _countries, punches);
         charter.showCharts();
 
         // Cards

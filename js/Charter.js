@@ -162,7 +162,7 @@ Charter.prototype.generatePunch = function (punch_data, selector, punch_step = 4
 };
 
 
-Charter.prototype.loadCharts = function (rev_data, orders_data, aov_data, cumulated_revenues, weekdays, _countries_data, punch_data) {
+Charter.prototype.loadCharts = function (rev_data, orders_data, aov_data, cumulated_revenues, weekdays, weekdays_orders, _countries_data, punch_data) {
 
     var countries_data = this.orderCountries(_countries_data);
 
@@ -305,6 +305,35 @@ Charter.prototype.loadCharts = function (rev_data, orders_data, aov_data, cumula
                 fontSize: this.titleSize,
                 fontFamily: this.titleFamily,
                 text: 'Revenues by weekday'
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+    new Chart(document.getElementById('weekdays_orders_chart'), {
+        type: 'bar',
+        data: {
+            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+            datasets: [{
+                label: 'Orders #',
+                data: weekdays_orders,
+                backgroundColor: ['rgba(255, 0, 64, 0.2)', 'rgba(255, 100, 64, 0.2)', 'rgba(255, 150, 64, 0.2)', 'rgba(255, 200, 64, 0.2)', 'rgba(255, 250, 64, 0.2)', 'rgba(255, 250, 0, 0.2)', 'rgba(250, 250, 0, 0.2)'],
+                borderColor: ['rgba(255, 0, 64, 1)', 'rgba(255, 100, 64, 1)', 'rgba(255, 150, 64, 1)', 'rgba(255, 200, 64, 1)', 'rgba(255, 250, 64, 1)', 'rgba(255, 250, 0, 1)', 'rgba(250, 250, 0, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                fontSize: this.titleSize,
+                fontFamily: this.titleFamily,
+                text: 'Orders # by weekday'
             },
             scales: {
                 yAxes: [{

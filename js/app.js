@@ -23,6 +23,7 @@ input.onchange = function () {
         var orders_day_b_day = [];
         var punches = [];
         var weekdays = [];
+        var weekdays_orders = [];
         var _countries = [];
 
         var summary_revenues_total = 0;
@@ -80,8 +81,10 @@ input.onchange = function () {
                     if (typeof punches[thisdate.getDay()] === 'undefined') {
                         punches[thisdate.getDay()] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                         weekdays[thisdate.getDay()] = this_total;
+                        weekdays_orders[thisdate.getDay()] = 1;
                     } else {
                         weekdays[thisdate.getDay()] += this_total;
+                        weekdays_orders[thisdate.getDay()] += 1;
                     }
 
                     if (typeof punches[thisdate.getDay()][thisdate.getHours()] === 'undefined') {
@@ -115,7 +118,7 @@ input.onchange = function () {
         );
 
         // Charts
-        charter.loadCharts(rev_day_b_day.reverse(), orders_day_b_day.reverse(), aov_day_b_day.reverse(), cumulated_revenues.reverse(), weekdays, _countries, punches);
+        charter.loadCharts(rev_day_b_day.reverse(), orders_day_b_day.reverse(), aov_day_b_day.reverse(), cumulated_revenues.reverse(), weekdays, weekdays_orders, _countries, punches);
         charter.showCharts();
 
         // Cards

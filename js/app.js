@@ -20,6 +20,7 @@ input.onchange = function () {
 
         var valid_states = ['complete', 'processing'];
         var rev_day_b_day = [];
+        var orders_day_b_day = [];
         var punches = [];
         var _countries = [];
 
@@ -60,9 +61,11 @@ input.onchange = function () {
 
                     if (typeof rev_day_b_day[dateday] === 'undefined') {
                         rev_day_b_day[dateday] = this_total;
+                        orders_day_b_day[dateday] = 1;
                     }
                     else {
                         rev_day_b_day[dateday] = rev_day_b_day[dateday] + this_total;
+                        orders_day_b_day[dateday] += 1;
                     }
 
                     if (typeof _countries[country] === 'undefined') {
@@ -88,8 +91,19 @@ input.onchange = function () {
             }
         });
 
+
+        var aov_day_b_day = [];
+
+        Object.keys(rev_day_b_day).forEach(
+            function (i) {
+                var revenues = rev_day_b_day[i];
+                var totOrders = orders_day_b_day[i];
+                aov_day_b_day[i] = (rev_day_b_day[i] / orders_day_b_day[i]).toFixed(2);
+            }
+        );
+
         // Charts
-        charter.loadCharts(rev_day_b_day.reverse(), _countries, punches);
+        charter.loadCharts(rev_day_b_day.reverse(), orders_day_b_day.reverse(), aov_day_b_day.reverse(), _countries, punches);
         charter.showCharts();
 
         // Cards

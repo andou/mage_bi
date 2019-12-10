@@ -122,7 +122,7 @@ Charter.prototype.generatePunch = function (punch_data, selector, punch_step = 4
             options: {
                 title: {
                     display: true,
-                    fontSize:  this.titleSize,
+                    fontSize: this.titleSize,
                     fontFamily: this.titleFamily,
                     text: 'Orders Punch Card'
                 },
@@ -162,7 +162,7 @@ Charter.prototype.generatePunch = function (punch_data, selector, punch_step = 4
 };
 
 
-Charter.prototype.loadCharts = function (rev_data, _countries_data, punch_data) {
+Charter.prototype.loadCharts = function (rev_data, orders_data, aov_data, _countries_data, punch_data) {
 
     var countries_data = this.orderCountries(_countries_data);
 
@@ -177,7 +177,7 @@ Charter.prototype.loadCharts = function (rev_data, _countries_data, punch_data) 
         options: {
             title: {
                 display: true,
-                fontSize:  this.titleSize,
+                fontSize: this.titleSize,
                 fontFamily: this.titleFamily,
                 text: 'Revenues Day By Day'
             },
@@ -190,6 +190,58 @@ Charter.prototype.loadCharts = function (rev_data, _countries_data, punch_data) 
             }
         }
     });
+
+
+    new Chart(document.getElementById('orders_day_b_day_chart'), {
+        type: 'line',
+        data: {
+            labels: this.getChartLabels(orders_data),
+            datasets: [
+                this.composeDataset('Orders', this.getDataSetValues(orders_data))
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                fontSize: this.titleSize,
+                fontFamily: this.titleFamily,
+                text: 'Orders Day By Day'
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+    new Chart(document.getElementById('aov_day_b_day_chart'), {
+        type: 'line',
+        data: {
+            labels: this.getChartLabels(aov_data),
+            datasets: [
+                this.composeDataset('AOVs', this.getDataSetValues(aov_data))
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                fontSize: this.titleSize,
+                fontFamily: this.titleFamily,
+                text: 'AOV Day By Day'
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
 
     new Chart(document.getElementById('countries_chart'), {
         type: 'pie',

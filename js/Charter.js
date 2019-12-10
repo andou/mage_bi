@@ -2,6 +2,8 @@ function Charter($) {
     this.$ = $;
     this.chartContainerSelector = '.chart-container';
     this.punchContainerId = 'punch_chart';
+    this.titleFamily = 'Arimo';
+    this.titleSize = 20;
 }
 
 
@@ -84,9 +86,9 @@ Charter.prototype.getPunchValues = function (data, idx, punch_step, punch_tick, 
     return res;
 };
 
-Charter.prototype.generatePunch = function (punch_data, selector, punch_step = 10, punch_tick = 4) {
+Charter.prototype.generatePunch = function (punch_data, selector, punch_step = 4, punch_tick = 2) {
 
-    var max_radius = 25;
+    var max_radius = 15;
     var max_count = 1;
 
     jQuery(punch_data).each(function (i) {
@@ -120,8 +122,8 @@ Charter.prototype.generatePunch = function (punch_data, selector, punch_step = 1
             options: {
                 title: {
                     display: true,
-                    fontSize: 20,
-                    fontFamily: 'Arimo',
+                    fontSize:  this.titleSize,
+                    fontFamily: this.titleFamily,
                     text: 'Orders Punch Card'
                 },
                 scales: {
@@ -135,7 +137,7 @@ Charter.prototype.generatePunch = function (punch_data, selector, punch_step = 1
                         display: false,
                         ticks: {
                             beginAtZero: true,
-                            max: 70,
+                            max: 30,
                             stepSize: punch_step
                         }
                     }]
@@ -148,7 +150,7 @@ Charter.prototype.generatePunch = function (punch_data, selector, punch_step = 1
                             var label = data.datasets[tooltipItem.datasetIndex].label || '';
 
                             if (label) {
-                                label += '  (' + new Dater().getHourFromX(hourx) + ':00 / ' + new Dater().getHourFromX(hourx + 4) + ':00): ';
+                                label += '  (' + new Dater().getHourFromX(hourx) + ':00 / ' + new Dater().getHourFromX(hourx + 2) + ':00): ';
                             }
                             label += parseInt(ordx / radius_const) + ' Orders';
                             return label;
@@ -175,8 +177,8 @@ Charter.prototype.loadCharts = function (rev_data, _countries_data, punch_data) 
         options: {
             title: {
                 display: true,
-                fontSize: 20,
-                fontFamily: 'Arimo',
+                fontSize:  this.titleSize,
+                fontFamily: this.titleFamily,
                 text: 'Revenues Day By Day'
             },
             scales: {
@@ -200,8 +202,8 @@ Charter.prototype.loadCharts = function (rev_data, _countries_data, punch_data) 
         options: {
             title: {
                 display: true,
-                fontSize: 20,
-                fontFamily: 'Arimo',
+                fontSize: this.titleSize,
+                fontFamily: this.titleFamily,
                 text: 'Orders By Country'
             }
         }

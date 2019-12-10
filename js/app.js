@@ -25,6 +25,7 @@ input.onchange = function () {
 
         var summary_revenues_total = 0;
         var summary_orders_total = 0;
+        var total_items = 0;
         var _start_date = new Date().getTime();
         var _end_date = new Date(0).getTime();
         var start_date = '';
@@ -42,6 +43,7 @@ input.onchange = function () {
 
                 if (valid_states.includes(state)) {
                     var this_total = parseFloat(el['TOTAL IN EUR']);
+                    total_items += parseInt(el['TOTAL ITEMS']);
                     var this_ts = thisdate.getTime();
 
                     summary_revenues_total += this_total;
@@ -91,7 +93,7 @@ input.onchange = function () {
         charter.showCharts();
 
         // Cards
-        var carder = new Carder(jQuery,summary_revenues_total,summary_orders_total,start_date,end_date);
+        var carder = new Carder(jQuery, summary_revenues_total, summary_orders_total, start_date, end_date, total_items);
         carder.populateCards();
         carder.showCards();
 

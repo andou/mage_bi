@@ -162,7 +162,7 @@ Charter.prototype.generatePunch = function (punch_data, selector, punch_step = 4
 };
 
 
-Charter.prototype.loadCharts = function (rev_data, orders_data, aov_data, cumulated_revenues, _countries_data, punch_data) {
+Charter.prototype.loadCharts = function (rev_data, orders_data, aov_data, cumulated_revenues, weekdays, _countries_data, punch_data) {
 
     var countries_data = this.orderCountries(_countries_data);
 
@@ -171,7 +171,7 @@ Charter.prototype.loadCharts = function (rev_data, orders_data, aov_data, cumula
         data: {
             labels: this.getChartLabels(rev_data),
             datasets: [
-                this.composeDataset('Revenues', this.getDataSetValues(rev_data),'rgba(153, 102, 255, 0.2)','rgba(153, 102, 255, 1)')
+                this.composeDataset('Revenues', this.getDataSetValues(rev_data), 'rgba(153, 102, 255, 0.2)', 'rgba(153, 102, 255, 1)')
             ]
         },
         options: {
@@ -196,7 +196,7 @@ Charter.prototype.loadCharts = function (rev_data, orders_data, aov_data, cumula
         data: {
             labels: this.getChartLabels(cumulated_revenues).reverse(),
             datasets: [
-                this.composeDataset('Cumulated revenues', this.getDataSetValues(cumulated_revenues).reverse(),'rgba(54, 162, 235, 0.2)','rgba(54, 162, 235, 1)')
+                this.composeDataset('Cumulated revenues', this.getDataSetValues(cumulated_revenues).reverse(), 'rgba(54, 162, 235, 0.2)', 'rgba(54, 162, 235, 1)')
             ]
         },
         options: {
@@ -247,7 +247,7 @@ Charter.prototype.loadCharts = function (rev_data, orders_data, aov_data, cumula
         data: {
             labels: this.getChartLabels(aov_data),
             datasets: [
-                this.composeDataset('AOVs', this.getDataSetValues(aov_data),'rgba(255, 159, 64, 0.2)','rgba(255, 159, 64, 1)')
+                this.composeDataset('AOVs', this.getDataSetValues(aov_data), 'rgba(255, 159, 64, 0.2)', 'rgba(255, 159, 64, 1)')
             ]
         },
         options: {
@@ -282,6 +282,36 @@ Charter.prototype.loadCharts = function (rev_data, orders_data, aov_data, cumula
                 fontSize: this.titleSize,
                 fontFamily: this.titleFamily,
                 text: 'Orders By Country'
+            }
+        }
+    });
+
+
+    new Chart(document.getElementById('weekdays_rev_chart'), {
+        type: 'bar',
+        data: {
+            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+            datasets: [{
+                label: 'Revenues',
+                data: weekdays,
+                backgroundColor: ['rgba(255, 0, 64, 0.2)', 'rgba(255, 100, 64, 0.2)', 'rgba(255, 150, 64, 0.2)', 'rgba(255, 200, 64, 0.2)', 'rgba(255, 250, 64, 0.2)', 'rgba(255, 250, 0, 0.2)', 'rgba(250, 250, 0, 0.2)'],
+                borderColor: ['rgba(255, 0, 64, 1)', 'rgba(255, 100, 64, 1)', 'rgba(255, 150, 64, 1)', 'rgba(255, 200, 64, 1)', 'rgba(255, 250, 64, 1)', 'rgba(255, 250, 0, 1)', 'rgba(250, 250, 0, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                fontSize: this.titleSize,
+                fontFamily: this.titleFamily,
+                text: 'Revenues by weekday'
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
             }
         }
     });
